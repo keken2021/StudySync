@@ -1,24 +1,25 @@
-export interface Task {
+export type Task = {
   taskId: number;
-  subjectId: number;
-  userId: number;
-  subjectName: string;
-  taskTitle: string | null;
-  taskType: string | null;
-  taskDueDate: string | null;
+  taskTitle: string;
+  taskType: string;
+  taskDueDate: string;
+  taskCreated: string;
   taskIsDone: boolean | null;
-  taskCreated: string | null;
-}
+  subjectId: number;
+  subjectName: string;
+  userId: number;
+};
 
-export interface CreateTaskRequest {
+export type CreateTaskDTO = {
   subjectId: number;
   taskTitle: string;
   taskType: string;
   taskDueDate: string;
-}
+};
 
-export interface UpdateTaskRequest {
+export type UpdateTaskDTO = {
   taskTitle: string;
   taskType: string;
   taskDueDate: string;
-}
+  taskIsDone: boolean;
+};

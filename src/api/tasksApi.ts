@@ -1,10 +1,9 @@
-
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/axios";
+import type { Task } from "@/types/TaskTypes";
 
-const fetchTasks = async () => {
+const fetchTasks = async (): Promise<Task[]> => {
   const res = await api.get("/tasks");
-  console.log("Fetched tasks:", res.data);
   return res.data;
 };
 
@@ -16,27 +15,76 @@ export const getTasks = () => {
   });
 };
 
+// Update task
+export const useUpdateTask = () => {
+  const queryClient = useQueryClient();
 
+  return useMutation({
+    mutationFn: async ({
+      taskId,
+      ...taskData
+    }: {
+      taskId: number;
+      taskTitle: string;
+      taskType: string;
+      taskDueDate: string;
+      taskIsDone: boolean;
+    }) => {
+      const payload = {
+        taskTitle: taskData.taskTitle,
+        taskType: taskData.taskType,
+        taskDueDate: taskData.taskDueDate,
+        taskIsDone: taskData.taskIsDone,
+      };
 
-// export const tasksApi = {
-//   getAll: (params?: { subjectId?: number; isDone?: boolean }) =>
-//     axiosClient.get<Task[]>("/tasks", { params }).then((r) => r.data),
+      const res = await api.put(`/tasks/${taskId}`, payload);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+};
 
-//   getUpcoming: () =>
-//     axiosClient.get<Task[]>("/tasks/upcoming").then((r) => r.data),
+export const useCreateTask = () => {
+  const queryClient = useQueryClient();
 
-//   getById: (id: number) =>
-//     axiosClient.get<Task>(`/tasks/${id}`).then((r) => r.data),
+  return useMutation({
+    mutationFn: async (taskData: {
+      subjectId: number;
+      taskTitle: string;
+      taskType: string;
+      taskDueDate: string;
+    }) => {
+      const payload = {
+        subjectId: taskData.subjectId,
+        taskTitle: taskData.taskTitle,
+        taskType: taskData.taskType,
+        taskDueDate: taskData.taskDueDate,
+      };
 
-//   create: (data: CreateTaskRequest) =>
-//     axiosClient.post<Task>("/tasks", data).then((r) => r.data),
+      console.log("Creating task with payload:", payload);
 
-//   update: (id: number, data: UpdateTaskRequest) =>
-//     axiosClient.put<Task>(`/tasks/${id}`, data).then((r) => r.data),
+      const res = await api.post("/tasks", payload);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+};
 
-//   toggle: (id: number) =>
-//     axiosClient.put<Task>(`/tasks/${id}/toggle`).then((r) => r.data),
+// Delete task
+export const useDeleteTask = () => {
+  const queryClient = useQueryClient();
 
-//   delete: (id: number) =>
-//     axiosClient.delete(`/tasks/${id}`),
-// };
+  return useMutation({
+    mutationFn: async (taskId: number) => {
+      const res = await api.delete(`/tasks/${taskId}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+};

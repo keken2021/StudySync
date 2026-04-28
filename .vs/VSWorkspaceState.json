@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\study-sync.Core",
+    "\\study-sync.Core\\Controllers",
+    "\\study-sync.Core\\Domain",
+    "\\study-sync.Core\\Domain\\Entities"
+  ],
+  "SelectedNode": "\\study-sync.Core\\Controllers\\PostsController.cs",
+  "PreviewInSolutionExplorer": false
+}

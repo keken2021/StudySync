@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Subjects",  href: "/subjects",  icon: BookOpen },
-  { label: "Tasks",     href: "/tasks",     icon: ClipboardList },
-  { label: "Grades",    href: "/grades",    icon: BarChart2 },
+  { label: "Subjects", href: "/subjects", icon: BookOpen },
+  { label: "Tasks", href: "/tasks", icon: ClipboardList },
+  { label: "Grades", href: "/grades", icon: BarChart2 },
 ];
 
 export function Main({ children }: { children: React.ReactNode }) {
@@ -15,7 +15,7 @@ export function Main({ children }: { children: React.ReactNode }) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
